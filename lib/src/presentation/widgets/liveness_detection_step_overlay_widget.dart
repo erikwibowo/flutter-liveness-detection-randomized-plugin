@@ -201,7 +201,7 @@ class LivenessDetectionStepOverlayWidgetState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Back',
+                          'Kembali',
                           style: TextStyle(
                               color: widget.isDarkMode
                                   ? Colors.white

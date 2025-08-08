@@ -429,10 +429,14 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
 
   void _onDetectionCompleted({XFile? imgToReturn}) async {
     final String? imgPath = imgToReturn?.path;
-    final File imageFile = File(imgPath ?? "");
-    final int fileSizeInBytes = await imageFile.length();
-    final double sizeInKb = fileSizeInBytes / 1024;
-    debugPrint('Image result size : ${sizeInKb.toStringAsFixed(2)} KB');
+    
+    if (imgPath != null && imgPath.isNotEmpty) {
+      final File imageFile = File(imgPath);
+      final int fileSizeInBytes = await imageFile.length();
+      final double sizeInKb = fileSizeInBytes / 1024;
+      debugPrint('Image result size : ${sizeInKb.toStringAsFixed(2)} KB');
+    }
+    
     if (widget.isEnableSnackBar) {
       final snackBar = SnackBar(
         content: Text(imgToReturn == null

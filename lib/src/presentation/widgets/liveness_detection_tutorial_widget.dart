@@ -37,7 +37,7 @@ class _LivenessDetectionTutorialScreenState
               height: 16,
             ),
             Text(
-              'Liveness Detection - Tutorial',
+              'Instruksi Singkat',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
@@ -67,22 +67,16 @@ class _LivenessDetectionTutorialScreenState
               child: Column(
                 children: [
                   ListTile(
-                    leading: Text(
-                      '1',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
-                    ),
+                    leading: 
+                      CircleAvatar(child: Text("1")),
                     subtitle: Text(
-                      "Make sure you are in an area that has sufficient lighting and that your ears are not covered by anything",
+                      "Pastikan Anda berada di area yang memiliki pencahayaan yang cukup dan telinga Anda tidak tertutup oleh apapun",
                       style: TextStyle(
                           color:
                               widget.isDarkMode ? Colors.white : Colors.black),
                     ),
                     title: Text(
-                      "Sufficient Lighting",
+                      "Pencahayaan yang cukup",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -91,22 +85,16 @@ class _LivenessDetectionTutorialScreenState
                     ),
                   ),
                   ListTile(
-                    leading: Text(
-                      '2',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
-                    ),
+                    leading: 
+                      CircleAvatar(child: Text("1")),
                     subtitle: Text(
-                      "Hold the phone at eye level and look straight at the camera",
+                      "Pegang handphone setinggi mata dan lihat langsung ke kamera",
                       style: TextStyle(
                           color:
                               widget.isDarkMode ? Colors.white : Colors.black),
                     ),
                     title: Text(
-                      "Straight Ahead View",
+                      "Pandangan Lurus ke Depan",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -115,22 +103,16 @@ class _LivenessDetectionTutorialScreenState
                     ),
                   ),
                   ListTile(
-                    leading: Text(
-                      '3',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
-                    ),
+                    leading: 
+                      CircleAvatar(child: Text("1")),
                     subtitle: Text(
-                      "The time limit given for the liveness detection system verification process is ${widget.duration ?? 45} seconds",
+                      "Batas waktu yang diberikan untuk proses verifikasi adalah ${widget.duration ?? 45} detik",
                       style: TextStyle(
                           color:
                               widget.isDarkMode ? Colors.white : Colors.black),
                     ),
                     title: Text(
-                      "Time Limit Verification",
+                      "Batas Waktu Verifikasi",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -144,43 +126,14 @@ class _LivenessDetectionTutorialScreenState
             const SizedBox(
               height: 24,
             ),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    widget.isDarkMode ? Colors.black87 : Colors.white,
-                foregroundColor:
-                    widget.isDarkMode ? Colors.white : Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              icon: const Icon(Icons.camera_alt_outlined),
-              onPressed: () => widget.onStartTap(),
-              label: const Text(
-                "Start the Liveness Detection System",
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => widget.onStartTap(),
+                icon: const Icon(Icons.camera_alt_outlined),
+                label: const Text('"Mulai Verifikasi Keaktifan"'),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Spacer(),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.info_outline_rounded,
-                  color: Colors.grey,
-                  size: 15,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Package Version: 1.0.6',
-                  style: TextStyle(color: Colors.grey),
-                )
-              ],
-            )
           ],
         ),
       ),

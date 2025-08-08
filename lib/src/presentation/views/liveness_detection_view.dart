@@ -1,11 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
-import 'package:flutter/foundation.dart';
-import 'package:flutter_liveness_detection_randomized_plugin/index.dart';
-import 'package:flutter_liveness_detection_randomized_plugin/src/core/constants/liveness_detection_step_constant.dart';
+import 'package:easy_debounce/easy_debounce.dart';
+import 'package:face_liveness_detection_randomized_plugin/index.dart';
+import 'package:face_liveness_detection_randomized_plugin/src/core/constants/liveness_detection_step_constant.dart';
 import 'package:collection/collection.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import 'package:image/image.dart' as img;
-import 'package:path_provider/path_provider.dart';
 
 List<CameraDescription> availableCams = [];
 
@@ -36,6 +34,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
   bool _isBusy = false;
   bool _isTakingPicture = false;
   Timer? _timerToDetectFace;
+  bool debouce = false;
 
   // Detection state variables
   late bool _isInfoStepCompleted;
@@ -92,37 +91,6 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     }
   }
 
-  Future<XFile?> _compressImage(XFile originalFile) async {
-    final int quality = widget.config.imageQuality;
-
-    if (quality >= 100) {
-      return originalFile;
-    }
-
-    try {
-      final bytes = await originalFile.readAsBytes();
-
-      final img.Image? originalImage = img.decodeImage(bytes);
-      if (originalImage == null) {
-        return originalFile;
-      }
-
-      final tempDir = await getTemporaryDirectory();
-      final String targetPath =
-          '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-      final compressedBytes = img.encodeJpg(originalImage, quality: quality);
-
-      final File compressedFile =
-          await File(targetPath).writeAsBytes(compressedBytes);
-
-      return XFile(compressedFile.path);
-    } catch (e) {
-      debugPrint("Error compressing image: $e");
-      return originalFile;
-    }
-  }
-
   List<T> manualRandomItemLiveness<T>(List<T> list) {
     final random = Random();
     List<T> shuffledList = List.from(list);
@@ -162,19 +130,19 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         ));
       }
 
-      if (label.lookUp != "" && widget.config.useCustomizedLabel) {
-        customizedSteps.add(LivenessDetectionStepItem(
-          step: LivenessDetectionStep.lookUp,
-          title: label.lookUp ?? "Look Up",
-        ));
-      }
+      // if (label.lookUp != "" && widget.config.useCustomizedLabel) {
+      //   customizedSteps.add(LivenessDetectionStepItem(
+      //     step: LivenessDetectionStep.lookUp,
+      //     title: label.lookUp ?? "Look Up",
+      //   ));
+      // }
 
-      if (label.lookDown != "" && widget.config.useCustomizedLabel) {
-        customizedSteps.add(LivenessDetectionStepItem(
-          step: LivenessDetectionStep.lookDown,
-          title: label.lookDown ?? "Look Down",
-        ));
-      }
+      // if (label.lookDown != "" && widget.config.useCustomizedLabel) {
+      //   customizedSteps.add(LivenessDetectionStepItem(
+      //     step: LivenessDetectionStep.lookDown,
+      //     title: label.lookDown ?? "Look Down",
+      //   ));
+      // }
 
       if (label.smile != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
@@ -277,41 +245,53 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         () => _onDetectionCompleted(imgToReturn: null));
   }
 
+  // --- START OF MODIFIED _processCameraImage METHOD ---
   Future<void> _processCameraImage(CameraImage cameraImage) async {
-    final WriteBuffer allBytes = WriteBuffer();
-    for (final Plane plane in cameraImage.planes) {
-      allBytes.putUint8List(plane.bytes);
-    }
-    final bytes = allBytes.done().buffer.asUint8List();
-
-    final Size imageSize = Size(
-      cameraImage.width.toDouble(),
-      cameraImage.height.toDouble(),
-    );
-
     final camera = availableCams[_cameraIndex];
-    final imageRotation =
-        InputImageRotationValue.fromRawValue(camera.sensorOrientation);
-    if (imageRotation == null) return;
-
-    final inputImageFormat =
-        InputImageFormatValue.fromRawValue(cameraImage.format.raw);
-    if (inputImageFormat == null) return;
-
-    final inputImageData = InputImageMetadata(
-      size: imageSize,
-      rotation: imageRotation,
-      format: inputImageFormat,
-      bytesPerRow: cameraImage.planes[0].bytesPerRow,
+    final InputImageRotation imageRotation =
+        InputImageRotation.values.firstWhere(
+      (element) => element.rawValue == camera.sensorOrientation,
+      orElse: () => InputImageRotation.rotation0deg,
     );
 
-    final inputImage = InputImage.fromBytes(
-      metadata: inputImageData,
-      bytes: bytes,
-    );
+    InputImage? inputImage;
+
+    if (Platform.isAndroid) {
+      const format = InputImageFormat.nv21;
+      final planes = cameraImage.planes;
+      inputImage = InputImage.fromBytes(
+        bytes: planes[0].bytes, // Y plane bytes
+        metadata: InputImageMetadata(
+          size:
+              Size(cameraImage.width.toDouble(), cameraImage.height.toDouble()),
+          rotation: imageRotation,
+          format: format,
+          bytesPerRow: planes[0].bytesPerRow, // Bytes per row for the Y plane
+        ),
+      );
+    } else if (Platform.isIOS) {
+      const format = InputImageFormat.bgra8888;
+      inputImage = InputImage.fromBytes(
+        bytes: cameraImage.planes[0].bytes, // Only one plane for BGRA
+        metadata: InputImageMetadata(
+          size:
+              Size(cameraImage.width.toDouble(), cameraImage.height.toDouble()),
+          rotation: imageRotation,
+          format: format,
+          bytesPerRow: cameraImage.planes[0].bytesPerRow,
+        ),
+      );
+    }
+
+    if (inputImage == null) {
+      debugPrint(
+          'Failed to create InputImage from CameraImage. InputImage was null.');
+      return;
+    }
 
     _processImage(inputImage);
   }
+  // --- END OF MODIFIED _processCameraImage METHOD ---
 
   Future<void> _processImage(InputImage inputImage) async {
     if (_isBusy) return;
@@ -323,9 +303,15 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     if (inputImage.metadata?.size != null &&
         inputImage.metadata?.rotation != null) {
       if (faces.isEmpty) {
-        _resetSteps();
-        if (mounted) setState(() => _faceDetectedState = false);
+        EasyDebounce.debounce("camera", const Duration(seconds: 1), () {
+          if (!debouce) {
+            return;
+          }
+          _resetSteps();
+          if (mounted) setState(() => _faceDetectedState = false);
+        });
       } else {
+        debouce = false;
         if (mounted) setState(() => _faceDetectedState = true);
         final currentIndex = _stepsKey.currentState?.currentIndex ?? 0;
         if (widget.config.useCustomizedLabel) {
@@ -406,37 +392,25 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       final XFile? clickedImage = await _cameraController?.takePicture();
       if (clickedImage == null) {
         _startLiveFeed();
-        if (mounted) setState(() => _isTakingPicture = false);
         return;
       }
-
-      final XFile? finalImage = await _compressImage(clickedImage);
-
-      debugPrint('Final image path: ${finalImage?.path}');
-      _onDetectionCompleted(imgToReturn: finalImage);
+      debugPrint('Image path: ${clickedImage.path}');
+      _onDetectionCompleted(imgToReturn: clickedImage);
     } catch (e) {
-      debugPrint('Error taking picture: $e');
-      if (mounted) setState(() => _isTakingPicture = false);
       _startLiveFeed();
     }
   }
 
-  void _onDetectionCompleted({XFile? imgToReturn}) async {
+  void _onDetectionCompleted({XFile? imgToReturn}) {
     final String? imgPath = imgToReturn?.path;
-    final File imageFile = File(imgPath ?? "");
-    final int fileSizeInBytes = await imageFile.length();
-    final double sizeInKb = fileSizeInBytes / 1024;
-    debugPrint('Image result size : ${sizeInKb.toStringAsFixed(2)} KB');
     if (widget.isEnableSnackBar) {
       final snackBar = SnackBar(
         content: Text(imgToReturn == null
             ? 'Verification of liveness detection failed, please try again. (Exceeds time limit ${widget.config.durationLivenessVerify ?? 45} second.)'
             : 'Verification of liveness detection success!'),
       );
-      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    if (!mounted) return;
     Navigator.of(context).pop(imgPath);
   }
 
@@ -479,7 +453,8 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: widget.config.backgroundColor ??
+          (widget.isDarkMode ? Colors.black : Colors.white),
       body: _buildBody(),
     );
   }
@@ -507,6 +482,10 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       return const Center(child: CircularProgressIndicator.adaptive());
     }
 
+    final size = MediaQuery.of(context).size;
+    var scale = size.aspectRatio * _cameraController!.value.aspectRatio;
+    if (scale < 1) scale = 1 / scale;
+
     return Stack(
       children: [
         Container(
@@ -515,7 +494,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
           color: widget.isDarkMode ? Colors.black : Colors.white,
         ),
         LivenessDetectionStepOverlayWidget(
-          cameraController: _cameraController,
+          textStyle: widget.config.textStyle,
           duration: widget.config.durationLivenessVerify,
           showDurationUiText: widget.config.showDurationUiText,
           isDarkMode: widget.isDarkMode,
@@ -539,7 +518,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required Face face,
     required LivenessDetectionStep step,
   }) async {
-    final blinkThreshold = FlutterLivenessDetectionRandomizedPlugin
+    final blinkThreshold = FaceLivenessDetectionRandomizedPlugin
             .instance.thresholdConfig
             .firstWhereOrNull((p0) => p0 is LivenessThresholdBlink)
         as LivenessThresholdBlink?;
@@ -558,7 +537,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required LivenessDetectionStep step,
   }) async {
     if (Platform.isAndroid) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
+      final headTurnThreshold = FaceLivenessDetectionRandomizedPlugin
               .instance.thresholdConfig
               .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
           as LivenessThresholdHead?;
@@ -568,7 +547,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         await _completeStep(step: step);
       }
     } else if (Platform.isIOS) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
+      final headTurnThreshold = FaceLivenessDetectionRandomizedPlugin
               .instance.thresholdConfig
               .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
           as LivenessThresholdHead?;
@@ -585,7 +564,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required LivenessDetectionStep step,
   }) async {
     if (Platform.isAndroid) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
+      final headTurnThreshold = FaceLivenessDetectionRandomizedPlugin
               .instance.thresholdConfig
               .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
           as LivenessThresholdHead?;
@@ -595,7 +574,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         await _completeStep(step: step);
       }
     } else if (Platform.isIOS) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
+      final headTurnThreshold = FaceLivenessDetectionRandomizedPlugin
               .instance.thresholdConfig
               .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
           as LivenessThresholdHead?;
@@ -611,7 +590,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required Face face,
     required LivenessDetectionStep step,
   }) async {
-    final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
+    final headTurnThreshold = FaceLivenessDetectionRandomizedPlugin
             .instance.thresholdConfig
             .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
         as LivenessThresholdHead?;
@@ -626,7 +605,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required Face face,
     required LivenessDetectionStep step,
   }) async {
-    final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
+    final headTurnThreshold = FaceLivenessDetectionRandomizedPlugin
             .instance.thresholdConfig
             .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
         as LivenessThresholdHead?;
@@ -641,7 +620,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required Face face,
     required LivenessDetectionStep step,
   }) async {
-    final smileThreshold = FlutterLivenessDetectionRandomizedPlugin
+    final smileThreshold = FaceLivenessDetectionRandomizedPlugin
             .instance.thresholdConfig
             .firstWhereOrNull((p0) => p0 is LivenessThresholdSmile)
         as LivenessThresholdSmile?;

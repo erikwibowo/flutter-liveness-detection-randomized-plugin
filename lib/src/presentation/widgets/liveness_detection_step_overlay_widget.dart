@@ -185,43 +185,46 @@ class LivenessDetectionStepOverlayWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.all(12),
-        height: double.infinity,
-        width: double.infinity,
-        child: Stack(
-          children: [
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: widget.showCurrentStep
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Kembali',
-                        ),
-                        Visibility(
-                          replacement: const SizedBox.shrink(),
-                          visible: widget.showDurationUiText,
-                          child: Text(
-                            _getRemainingTimeText(_remainingDuration),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: AppBar(title: const Text("Verifikasi Keaktifan"), centerTitle: true),
+      child: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(12),
+          height: double.infinity,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: widget.showCurrentStep
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Kembali',
+                          ),
+                          Visibility(
+                            replacement: const SizedBox.shrink(),
+                            visible: widget.showDurationUiText,
+                            child: Text(
+                              _getRemainingTimeText(_remainingDuration),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          stepCounter,
-                        )
-                      ],
-                    )
-                  : Text('Kembali'),
-            ),
-            _buildBody(),
-          ],
+                          Text(
+                            stepCounter,
+                          )
+                        ],
+                      )
+                    : Text('Kembali'),
+              ),
+              _buildBody(),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 

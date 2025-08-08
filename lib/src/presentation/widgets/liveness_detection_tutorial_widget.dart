@@ -25,7 +25,7 @@ class _LivenessDetectionTutorialScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Veriivikasi Keaktifan"), centerTitle: true),
+      appBar: AppBar(title: const Text("Verifikasi Keaktifan"), centerTitle: true),
       body: SafeArea(
         minimum: const EdgeInsets.all(12),
         child: Column(

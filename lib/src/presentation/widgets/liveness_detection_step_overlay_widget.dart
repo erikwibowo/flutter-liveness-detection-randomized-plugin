@@ -191,7 +191,6 @@ class LivenessDetectionStepOverlayWidgetState
         margin: const EdgeInsets.all(12),
         height: double.infinity,
         width: double.infinity,
-        color: Colors.transparent,
         child: Stack(
           children: [
             GestureDetector(

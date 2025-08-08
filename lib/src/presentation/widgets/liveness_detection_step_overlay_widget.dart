@@ -185,7 +185,7 @@ class LivenessDetectionStepOverlayWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
       child: Container(
         margin: const EdgeInsets.all(12),
         height: double.infinity,

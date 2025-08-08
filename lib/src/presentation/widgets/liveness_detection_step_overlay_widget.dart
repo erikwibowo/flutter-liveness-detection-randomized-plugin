@@ -306,7 +306,7 @@ class LivenessDetectionStepOverlayWidgetState
         ),
         const SizedBox(width: 16),
         Text(
-          widget.isFaceDetected ? 'User Face Found' : 'User Face Not Found...',
+          widget.isFaceDetected ? 'Wajah ditemukan' : 'Wajah tidak ditemukan',
           style:
               TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black),
         ),

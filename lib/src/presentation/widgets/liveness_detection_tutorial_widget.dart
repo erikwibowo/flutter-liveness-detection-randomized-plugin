@@ -32,23 +32,7 @@ class _LivenessDetectionTutorialScreenState
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: widget.isDarkMode ? Colors.black87 : Colors.white,
-                boxShadow: !widget.isDarkMode
-                    ? [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
-              ),
+            Card(
               child: Column(
                 children: [
                   ListTile(

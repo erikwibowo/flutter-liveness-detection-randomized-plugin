@@ -49,7 +49,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       await ScreenBrightness.instance
           .setApplicationScreenBrightness(brightness);
     } catch (e) {
-      throw 'Failed to set application brightness';
+      throw 'Gagal mengatur kecerahan aplikasi';
     }
   }
 
@@ -57,7 +57,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     try {
       await ScreenBrightness.instance.resetApplicationScreenBrightness();
     } catch (e) {
-      throw 'Failed to reset application brightness';
+      throw 'Gagal mengatur ulang kecerahan aplikasi';
     }
   }
 
@@ -112,42 +112,42 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       if (label.blink != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
           step: LivenessDetectionStep.blink,
-          title: label.blink ?? "Blink 2-3 Times",
+          title: label.blink ?? "Kedipkan mata 2-3 kali",
         ));
       }
 
       if (label.lookRight != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
           step: LivenessDetectionStep.lookRight,
-          title: label.lookRight ?? "Look Right",
+          title: label.lookRight ?? "Lihat ke kanan",
         ));
       }
 
       if (label.lookLeft != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
           step: LivenessDetectionStep.lookLeft,
-          title: label.lookLeft ?? "Look Left",
+          title: label.lookLeft ?? "Lihat ke kiri",
         ));
       }
 
       // if (label.lookUp != "" && widget.config.useCustomizedLabel) {
       //   customizedSteps.add(LivenessDetectionStepItem(
       //     step: LivenessDetectionStep.lookUp,
-      //     title: label.lookUp ?? "Look Up",
+      //     title: label.lookUp ?? "Lihat ke atas",
       //   ));
       // }
 
       // if (label.lookDown != "" && widget.config.useCustomizedLabel) {
       //   customizedSteps.add(LivenessDetectionStepItem(
       //     step: LivenessDetectionStep.lookDown,
-      //     title: label.lookDown ?? "Look Down",
+      //     title: label.lookDown ?? "Lihat ke bawah",
       //   ));
       // }
 
       if (label.smile != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
           step: LivenessDetectionStep.smile,
-          title: label.smile ?? "Smile",
+          title: label.smile ?? "Tersenyum",
         ));
       }
       _cachedShuffledSteps = manualRandomItemLiveness(customizedSteps);
@@ -285,7 +285,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
 
     if (inputImage == null) {
       debugPrint(
-          'Failed to create InputImage from CameraImage. InputImage was null.');
+          'Gagal membuat InputImage dari CameraImage. InputImage adalah null.');
       return;
     }
 
@@ -347,7 +347,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
   }) async {
     if (_isProcessingStep) return;
 
-    debugPrint('Current Step: $step');
+    debugPrint('Langkah Saat Ini: $step');
 
     switch (step) {
       case LivenessDetectionStep.blink:
@@ -394,7 +394,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         _startLiveFeed();
         return;
       }
-      debugPrint('Image path: ${clickedImage.path}');
+      debugPrint('Jalur gambar: ${clickedImage.path}');
       _onDetectionCompleted(imgToReturn: clickedImage);
     } catch (e) {
       _startLiveFeed();
@@ -406,8 +406,8 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     if (widget.isEnableSnackBar) {
       final snackBar = SnackBar(
         content: Text(imgToReturn == null
-            ? 'Verification of liveness detection failed, please try again. (Exceeds time limit ${widget.config.durationLivenessVerify ?? 45} second.)'
-            : 'Verification of liveness detection success!'),
+            ? 'Verifikasi deteksi keaktifan gagal, silakan coba lagi. (Melebihi batas waktu ${widget.config.durationLivenessVerify ?? 45} detik.)'
+            : 'Verifikasi deteksi keaktifan berhasil!'),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

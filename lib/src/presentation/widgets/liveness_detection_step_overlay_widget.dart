@@ -202,10 +202,6 @@ class LivenessDetectionStepOverlayWidgetState
                       children: [
                         Text(
                           'Kembali',
-                          style: TextStyle(
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black),
                         ),
                         Visibility(
                           replacement: const SizedBox.shrink(),
@@ -213,26 +209,16 @@ class LivenessDetectionStepOverlayWidgetState
                           child: Text(
                             _getRemainingTimeText(_remainingDuration),
                             style: TextStyle(
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         Text(
                           stepCounter,
-                          style: TextStyle(
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black),
                         )
                       ],
                     )
-                  : Text('Back',
-                      style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black)),
+                  : Text('Kembali'),
             ),
             _buildBody(),
           ],
@@ -307,8 +293,6 @@ class LivenessDetectionStepOverlayWidgetState
         const SizedBox(width: 16),
         Text(
           widget.isFaceDetected ? 'Wajah ditemukan' : 'Wajah tidak ditemukan',
-          style:
-              TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black),
         ),
       ],
     );
@@ -334,7 +318,6 @@ class LivenessDetectionStepOverlayWidgetState
       padding: const EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
-          color: widget.isDarkMode ? Colors.black : Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
         alignment: Alignment.center,
@@ -344,7 +327,6 @@ class LivenessDetectionStepOverlayWidgetState
           widget.steps[index].title,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: widget.isDarkMode ? Colors.white : Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.w500,
           ),

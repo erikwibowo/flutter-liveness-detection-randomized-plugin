@@ -25,28 +25,13 @@ class _LivenessDetectionTutorialScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
+      appBar: AppBar(title: const Text("Veriivikasi Keaktifan"), centerTitle: true),
       body: SafeArea(
         minimum: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              'Instruksi Singkat',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: widget.isDarkMode ? Colors.white : Colors.black,
-              ),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
             Container(
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -71,59 +56,31 @@ class _LivenessDetectionTutorialScreenState
                       CircleAvatar(child: Text("1")),
                     subtitle: Text(
                       "Pastikan Anda berada di area yang memiliki pencahayaan yang cukup dan telinga Anda tidak tertutup oleh apapun",
-                      style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
                     ),
                     title: Text(
                       "Pencahayaan yang cukup",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
-                    ),
                   ),
                   ListTile(
                     leading: 
-                      CircleAvatar(child: Text("1")),
+                      CircleAvatar(child: Text("2")),
                     subtitle: Text(
                       "Pegang handphone setinggi mata dan lihat langsung ke kamera",
-                      style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
                     ),
                     title: Text(
                       "Pandangan Lurus ke Depan",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
-                    ),
                   ),
                   ListTile(
                     leading: 
-                      CircleAvatar(child: Text("1")),
+                      CircleAvatar(child: Text("3")),
                     subtitle: Text(
                       "Batas waktu yang diberikan untuk proses verifikasi adalah ${widget.duration ?? 45} detik",
-                      style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
                     ),
                     title: Text(
                       "Batas Waktu Verifikasi",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
-                    ),
                   )
                 ],
               ),
             ),
-            const Spacer(),
             const SizedBox(
               height: 24,
             ),

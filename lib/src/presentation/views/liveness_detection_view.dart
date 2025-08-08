@@ -260,8 +260,14 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
 
   void _startLiveFeed() async {
     final camera = availableCams[_cameraIndex];
-    _cameraController =
-        CameraController(camera, ResolutionPreset.high, enableAudio: false);
+    _cameraController = CameraController(
+      camera,
+      ResolutionPreset.high,
+      enableAudio: false,
+      imageFormatGroup: Platform.isAndroid
+          ? ImageFormatGroup.nv21
+          : ImageFormatGroup.bgra8888,
+    );
 
     _cameraController?.initialize().then((_) {
       if (!mounted) return;

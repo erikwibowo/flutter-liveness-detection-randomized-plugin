@@ -123,6 +123,7 @@ class _LivenessDetectionTutorialScreenState
                 ],
               ),
             ),
+            const Spacer(),
             const SizedBox(
               height: 24,
             ),
@@ -131,7 +132,7 @@ class _LivenessDetectionTutorialScreenState
               child: FilledButton.icon(
                 onPressed: () => widget.onStartTap(),
                 icon: const Icon(Icons.camera_alt_outlined),
-                label: const Text('"Mulai Verifikasi Keaktifan"'),
+                label: const Text('Mulai Verifikasi Keaktifan'),
               ),
             ),
           ],

@@ -59,6 +59,7 @@ class _LivenessDetectionTutorialScreenState
                     ),
                     title: Text(
                       "Pencahayaan yang cukup",
+                    ),
                   ),
                   ListTile(
                     leading: 
@@ -68,6 +69,7 @@ class _LivenessDetectionTutorialScreenState
                     ),
                     title: Text(
                       "Pandangan Lurus ke Depan",
+                    ),
                   ),
                   ListTile(
                     leading: 
@@ -77,7 +79,8 @@ class _LivenessDetectionTutorialScreenState
                     ),
                     title: Text(
                       "Batas Waktu Verifikasi",
-                  )
+                    ),
+                  ),
                 ],
               ),
             ),

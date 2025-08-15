@@ -319,47 +319,126 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     _processImage(inputImage);
   }
 
-  Future<void> _processImage(InputImage inputImage) async {
-    if (_isBusy) return;
-    _isBusy = true;
-
-    final faces =
-        await MachineLearningKitHelper.instance.processInputImage(inputImage);
-
-    if (inputImage.metadata?.size != null &&
-        inputImage.metadata?.rotation != null) {
-      if (faces.isEmpty) {
-        _resetSteps();
-        if (mounted) setState(() => _faceDetectedState = false);
-      } else {
-        if (mounted) setState(() => _faceDetectedState = true);
-        final currentIndex = _stepsKey.currentState?.currentIndex ?? 0;
-        if (widget.config.useCustomizedLabel) {
-          if (currentIndex <
-              customizedLivenessLabel(widget.config.customizedLabel!).length) {
-            _detectFace(
-              face: faces.first,
-              step: customizedLivenessLabel(
-                      widget.config.customizedLabel!)[currentIndex]
-                  .step,
-            );
-          }
-        } else {
-          if (currentIndex < stepLiveness.length) {
-            _detectFace(
-              face: faces.first,
-              step: stepLiveness[currentIndex].step,
-            );
-          }
-        }
-      }
-    } else {
-      _resetSteps();
+  Future<void> _processCameraImage(CameraImage cameraImage) async {
+  try {
+    // Validate camera image first
+    if (cameraImage.planes.isEmpty) {
+      debugPrint("Camera image has no planes");
+      return;
     }
 
-    _isBusy = false;
-    if (mounted) setState(() {});
+    final WriteBuffer allBytes = WriteBuffer();
+    for (final Plane plane in cameraImage.planes) {
+      allBytes.putUint8List(plane.bytes);
+    }
+    final bytes = allBytes.done().buffer.asUint8List();
+
+    // Validate bytes
+    if (bytes.isEmpty) {
+      debugPrint("Camera image bytes are empty");
+      return;
+    }
+
+    final Size imageSize = Size(
+      cameraImage.width.toDouble(),
+      cameraImage.height.toDouble(),
+    );
+
+    final camera = availableCams[_cameraIndex];
+    final imageRotation =
+        InputImageRotationValue.fromRawValue(camera.sensorOrientation);
+    if (imageRotation == null) {
+      debugPrint("Unsupported sensor orientation: ${camera.sensorOrientation}");
+      return;
+    }
+
+    final inputImageFormat =
+        InputImageFormatValue.fromRawValue(cameraImage.format.raw);
+    if (inputImageFormat == null) {
+      debugPrint("Unsupported image format: ${cameraImage.format.raw}");
+      debugPrint("Format group: ${cameraImage.format.group}");
+      
+      // Try to restart with a different format
+      await _handleUnsupportedFormat();
+      return;
+    }
+
+    // For google_mlkit_face_detection ^0.13.1, validate format compatibility
+    if (Platform.isAndroid && inputImageFormat == InputImageFormat.nv21) {
+      debugPrint("NV21 format detected - this may cause issues");
+    }
+
+    final inputImageData = InputImageMetadata(
+      size: imageSize,
+      rotation: imageRotation,
+      format: inputImageFormat,
+      bytesPerRow: cameraImage.planes[0].bytesPerRow,
+    );
+
+    final inputImage = InputImage.fromBytes(
+      metadata: inputImageData,
+      bytes: bytes,
+    );
+
+    await _processImage(inputImage);
+    
+  } catch (e) {
+    debugPrint("Error processing camera image: $e");
+    
+    if (e.toString().contains('ImageFormat is not supported') ||
+        e.toString().contains('InputImageConverterError')) {
+      debugPrint("ML Kit format error detected");
+      await _handleUnsupportedFormat();
+    }
   }
+}
+
+// Add this helper method to handle format issues
+Future<void> _handleUnsupportedFormat() async {
+  static int retryCount = 0;
+  
+  if (retryCount >= 2) {
+    debugPrint("Max retries reached for format fix");
+    return;
+  }
+  
+  retryCount++;
+  debugPrint("Attempting to fix camera format (attempt $retryCount)");
+  
+  try {
+    await _cameraController?.stopImageStream();
+    await _cameraController?.dispose();
+    
+    final camera = availableCams[_cameraIndex];
+    
+    // Try different format based on retry count
+    ImageFormatGroup? formatGroup;
+    if (Platform.isAndroid) {
+      formatGroup = retryCount == 1 
+          ? ImageFormatGroup.yuv420 
+          : null; // Let system choose on second retry
+    } else {
+      formatGroup = ImageFormatGroup.bgra8888;
+    }
+    
+    _cameraController = CameraController(
+      camera,
+      ResolutionPreset.medium,
+      enableAudio: false,
+      imageFormatGroup: formatGroup,
+    );
+
+    await _cameraController?.initialize();
+    if (mounted) {
+      _cameraController?.startImageStream(_processCameraImage);
+      setState(() {});
+    }
+    
+    debugPrint("Camera reinitialized successfully");
+  } catch (e) {
+    debugPrint("Failed to reinitialize camera: $e");
+  }
+}
 
   void _detectFace({
     required Face face,

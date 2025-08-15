@@ -38,31 +38,31 @@ class _LivenessDetectionTutorialScreenState
                   ListTile(
                     leading: 
                       CircleAvatar(child: Text("1")),
-                    subtitle: Text(
-                      "Pastikan Anda berada di area yang memiliki pencahayaan yang cukup dan telinga Anda tidak tertutup oleh apapun",
-                    ),
                     title: Text(
                       "Pencahayaan yang cukup",
+                    ),
+                    subtitle: Text(
+                      "Pastikan Anda berada di area yang memiliki pencahayaan yang cukup dan telinga Anda tidak tertutup oleh apapun",
                     ),
                   ),
                   ListTile(
                     leading: 
                       CircleAvatar(child: Text("2")),
-                    subtitle: Text(
-                      "Pegang handphone setinggi mata dan lihat langsung ke kamera",
-                    ),
                     title: Text(
                       "Pandangan Lurus ke Depan",
+                    ),
+                    subtitle: Text(
+                      "Pegang handphone setinggi mata dan lihat langsung ke kamera",
                     ),
                   ),
                   ListTile(
                     leading: 
                       CircleAvatar(child: Text("3")),
-                    subtitle: Text(
-                      "Batas waktu yang diberikan untuk proses verifikasi adalah ${widget.duration ?? 45} detik",
-                    ),
                     title: Text(
                       "Batas Waktu Verifikasi",
+                    ),
+                    subtitle: Text(
+                      "Batas waktu yang diberikan untuk proses verifikasi adalah ${widget.duration ?? 45} detik",
                     ),
                   ),
                 ],

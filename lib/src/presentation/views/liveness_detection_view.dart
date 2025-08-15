@@ -265,7 +265,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       ResolutionPreset.high,
       enableAudio: false,
       imageFormatGroup: Platform.isAndroid
-          ? ImageFormatGroup.yuv420
+          ? ImageFormatGroup.nv21
           : ImageFormatGroup.bgra8888,
     );
 

@@ -26,6 +26,7 @@ class FlutterLivenessDetectionRandomizedPlugin {
           shuffleListWithSmileLast: shuffleListWithSmileLast,
           showCurrentStep: showCurrentStep,
           isDarkMode: isDarkMode,
+          showDurationUiText: true,
         ),
       ),
     );

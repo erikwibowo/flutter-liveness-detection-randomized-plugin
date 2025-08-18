@@ -144,7 +144,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       if (label.blink != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
           step: LivenessDetectionStep.blink,
-          title: label.blink ?? "Kedipkan mata 2-3 kali",
+          title: label.blink ?? "Kedipkan mata",
         ));
       }
 
@@ -499,7 +499,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
             ? _buildDetectionBody()
             : LivenessDetectionTutorialScreen(
                 duration: widget.config.durationLivenessVerify ?? 45,
-                isDarkMode: widget.isDarkMode,
+                isDarkMode: Theme.of(context).brightness == Brightness.dark,
                 onStartTap: () {
                   if (mounted) setState(() => _isInfoStepCompleted = true);
                   _startLiveFeed();
@@ -520,13 +520,12 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: widget.isDarkMode ? Colors.black : Colors.white,
         ),
         LivenessDetectionStepOverlayWidget(
           cameraController: _cameraController,
           duration: widget.config.durationLivenessVerify,
           showDurationUiText: widget.config.showDurationUiText,
-          isDarkMode: widget.isDarkMode,
+          isDarkMode: Theme.of(context).brightness == Brightness.dark,
           isFaceDetected: _faceDetectedState,
           camera: CameraPreview(_cameraController!),
           key: _stepsKey,

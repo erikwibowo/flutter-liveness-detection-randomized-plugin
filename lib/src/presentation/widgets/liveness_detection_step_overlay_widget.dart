@@ -217,6 +217,7 @@ class LivenessDetectionStepOverlayWidgetState
         Theme.of(context).brightness == Brightness.dark
             ? _buildLoaderDarkMode()
             : _buildLoaderLightMode(),
+        const SizedBox(height: 16),
       ],
     );
   }

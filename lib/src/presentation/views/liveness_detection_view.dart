@@ -528,7 +528,6 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
           isDarkMode: Theme.of(context).brightness == Brightness.dark,
           isFaceDetected: _faceDetectedState,
           camera: CameraPreview(_cameraController!),
-          showDurationUiText: true,
           key: _stepsKey,
           steps: widget.config.useCustomizedLabel
               ? customizedLivenessLabel(widget.config.customizedLabel!)

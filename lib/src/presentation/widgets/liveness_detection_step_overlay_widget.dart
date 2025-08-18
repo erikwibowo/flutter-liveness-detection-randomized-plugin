@@ -214,9 +214,11 @@ class LivenessDetectionStepOverlayWidgetState
           child: _buildStepPageView(),
         ),
         const SizedBox(height: 16),
-        Theme.of(context).brightness == Brightness.dark
-            ? _buildLoaderDarkMode()
-            : _buildLoaderLightMode(),
+        Center(
+          child: CupertinoActivityIndicator(
+            color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
       ],
     );
   }
@@ -304,22 +306,6 @@ class LivenessDetectionStepOverlayWidgetState
             fontWeight: FontWeight.w500,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildLoaderDarkMode() {
-    return Center(
-      child: CupertinoActivityIndicator(
-        color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
-      ),
-    );
-  }
-
-  Widget _buildLoaderLightMode() {
-    return Center(
-      child: CupertinoActivityIndicator(
-        color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
       ),
     );
   }

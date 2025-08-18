@@ -311,7 +311,7 @@ class LivenessDetectionStepOverlayWidgetState
   Widget _buildLoaderDarkMode() {
     return Center(
       child: CupertinoActivityIndicator(
-        color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -319,7 +319,7 @@ class LivenessDetectionStepOverlayWidgetState
   Widget _buildLoaderLightMode() {
     return Center(
       child: CupertinoActivityIndicator(
-        color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }

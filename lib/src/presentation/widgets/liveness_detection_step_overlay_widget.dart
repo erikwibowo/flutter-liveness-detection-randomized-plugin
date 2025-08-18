@@ -216,7 +216,7 @@ class LivenessDetectionStepOverlayWidgetState
         const SizedBox(height: 16),
         Center(
           child: CupertinoActivityIndicator(
-            color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
+            color: _isLoading ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ],

@@ -214,7 +214,9 @@ class LivenessDetectionStepOverlayWidgetState
           child: _buildStepPageView(),
         ),
         const SizedBox(height: 16),
-        widget.isDarkMode ? _buildLoaderDarkMode() : _buildLoaderLightMode(),
+        Theme.of(context).brightness == Brightness.dark
+            ? _buildLoaderDarkMode()
+            : _buildLoaderLightMode(),
       ],
     );
   }
@@ -241,7 +243,7 @@ class LivenessDetectionStepOverlayWidgetState
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          child: widget.isDarkMode
+          child: Theme.of(context).brightness == Brightness.dark
               ? LottieBuilder.asset(
                   widget.isFaceDetected
                       ? 'packages/flutter_liveness_detection_randomized_plugin/src/core/assets/face-detected.json'
@@ -309,7 +311,7 @@ class LivenessDetectionStepOverlayWidgetState
   Widget _buildLoaderDarkMode() {
     return Center(
       child: CupertinoActivityIndicator(
-        color: !_isLoading ? Colors.transparent : Colors.white,
+        color: !_isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -317,7 +319,7 @@ class LivenessDetectionStepOverlayWidgetState
   Widget _buildLoaderLightMode() {
     return Center(
       child: CupertinoActivityIndicator(
-        color: _isLoading ? Colors.transparent : Colors.white,
+        color: _isLoading ? Colors.transparent : Theme.of(context).colorScheme.onSurface,
       ),
     );
   }

@@ -148,34 +148,6 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
         ));
       }
 
-      if (label.lookRight != "" && widget.config.useCustomizedLabel) {
-        customizedSteps.add(LivenessDetectionStepItem(
-          step: LivenessDetectionStep.lookRight,
-          title: label.lookRight ?? "Lihat ke kanan",
-        ));
-      }
-
-      if (label.lookLeft != "" && widget.config.useCustomizedLabel) {
-        customizedSteps.add(LivenessDetectionStepItem(
-          step: LivenessDetectionStep.lookLeft,
-          title: label.lookLeft ?? "Lihat ke kiri",
-        ));
-      }
-
-      if (label.lookUp != "" && widget.config.useCustomizedLabel) {
-        customizedSteps.add(LivenessDetectionStepItem(
-          step: LivenessDetectionStep.lookUp,
-          title: label.lookUp ?? "Lihat ke atas",
-        ));
-      }
-
-      if (label.lookDown != "" && widget.config.useCustomizedLabel) {
-        customizedSteps.add(LivenessDetectionStepItem(
-          step: LivenessDetectionStep.lookDown,
-          title: label.lookDown ?? "Lihat ke bawah",
-        ));
-      }
-
       if (label.smile != "" && widget.config.useCustomizedLabel) {
         customizedSteps.add(LivenessDetectionStepItem(
           step: LivenessDetectionStep.smile,

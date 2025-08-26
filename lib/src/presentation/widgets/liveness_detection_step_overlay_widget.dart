@@ -209,14 +209,19 @@ class LivenessDetectionStepOverlayWidgetState
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
+        Text(
+          _getRemainingTimeText(_remainingDuration),
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: _remainingDuration < 10
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.primary,
+              ),
+        ),
+        const SizedBox(height: 16),
         _buildCircularCamera(),
         const SizedBox(height: 16),
         _buildFaceDetectionStatus(),
-        const SizedBox(height: 16),
-        Text(
-          _getRemainingTimeText(_remainingDuration),
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
         const SizedBox(height: 16),
         Visibility(
           visible: _pageViewVisible,

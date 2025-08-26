@@ -208,6 +208,8 @@ class LivenessDetectionStepOverlayWidgetState
         const SizedBox(height: 16),
         _buildFaceDetectionStatus(),
         const SizedBox(height: 16),
+        Text(_getRemainingTimeText(widget.duration ?? 45)),
+        const SizedBox(height: 16),
         Visibility(
           visible: _pageViewVisible,
           replacement: const CircularProgressIndicator.adaptive(),
@@ -301,7 +303,7 @@ class LivenessDetectionStepOverlayWidgetState
         child: Text(
           widget.steps[index].title,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w500,
           ),

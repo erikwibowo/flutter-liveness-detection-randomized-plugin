@@ -35,7 +35,7 @@ class _LivenessDetectionTutorialScreenState
             Card(
               child: Column(
                 children: [
-                  ListTile(
+                  const ListTile(
                     leading: 
                       CircleAvatar(child: Text("1")),
                     title: Text(
@@ -45,7 +45,7 @@ class _LivenessDetectionTutorialScreenState
                       "Pastikan Anda berada di area yang memiliki pencahayaan yang cukup dan telinga Anda tidak tertutup oleh apapun",
                     ),
                   ),
-                  ListTile(
+                  const ListTile(
                     leading: 
                       CircleAvatar(child: Text("2")),
                     title: Text(
@@ -57,8 +57,8 @@ class _LivenessDetectionTutorialScreenState
                   ),
                   ListTile(
                     leading: 
-                      CircleAvatar(child: Text("3")),
-                    title: Text(
+                      const CircleAvatar(child: Text("3")),
+                    title: const Text(
                       "Batas Waktu Verifikasi",
                     ),
                     subtitle: Text(

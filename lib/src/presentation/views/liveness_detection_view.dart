@@ -72,18 +72,36 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     required bool isSmileLast,
   }) {
     if (isSmileLast) {
-      int? blinkIndex =
+      // Find blink and smile items
+      final int blinkIndex =
           list.indexWhere((item) => item.step == LivenessDetectionStep.blink);
-      int? smileIndex =
+      final int smileIndex =
           list.indexWhere((item) => item.step == LivenessDetectionStep.smile);
 
       if (blinkIndex != -1 && smileIndex != -1) {
-        LivenessDetectionStepItem blinkItem = list.removeAt(blinkIndex);
-        LivenessDetectionStepItem smileItem = list
-            .removeAt(smileIndex > blinkIndex ? smileIndex - 1 : smileIndex);
-        list.shuffle(Random());
-        list.insert(list.length - 1, blinkItem);
-        list.add(smileItem);
+        // Extract the blink/smile items and keep other items separate
+        final LivenessDetectionStepItem blinkItem =
+            list.firstWhere((i) => i.step == LivenessDetectionStep.blink);
+        final LivenessDetectionStepItem smileItem =
+            list.firstWhere((i) => i.step == LivenessDetectionStep.smile);
+
+        final remaining = list
+            .where((i) =>
+                i.step != LivenessDetectionStep.blink &&
+                i.step != LivenessDetectionStep.smile)
+            .toList();
+        remaining.shuffle(Random());
+
+        // Rebuild list: blink, shuffled remaining, smile
+        final rebuilt = <LivenessDetectionStepItem>[];
+        rebuilt.add(blinkItem);
+        rebuilt.addAll(remaining);
+        rebuilt.add(smileItem);
+
+        // Modify the original list in-place to preserve references
+        list
+          ..clear()
+          ..addAll(rebuilt);
       } else {
         list.shuffle(Random());
       }
@@ -383,14 +401,14 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
 
   void _onDetectionCompleted({XFile? imgToReturn}) async {
     final String? imgPath = imgToReturn?.path;
-    
+
     if (imgPath != null && imgPath.isNotEmpty) {
       final File imageFile = File(imgPath);
       final int fileSizeInBytes = await imageFile.length();
       final double sizeInKb = fileSizeInBytes / 1024;
       debugPrint('Image result size : ${sizeInKb.toStringAsFixed(2)} KB');
     }
-    
+
     if (widget.isEnableSnackBar) {
       final snackBar = SnackBar(
         content: Text(imgToReturn == null
@@ -514,6 +532,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       await _completeStep(step: step);
     }
   }
+
   Future<void> _handlingSmile({
     required Face face,
     required LivenessDetectionStep step,

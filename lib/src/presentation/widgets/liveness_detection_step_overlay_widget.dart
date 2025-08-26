@@ -267,8 +267,8 @@ class LivenessDetectionStepOverlayWidgetState
                   widget.isFaceDetected
                       ? 'packages/flutter_liveness_detection_randomized_plugin/src/core/assets/face-detected.json'
                       : 'packages/flutter_liveness_detection_randomized_plugin/src/core/assets/face-id-anim.json',
-                  height: widget.isFaceDetected ? 32 : 22,
-                  width: widget.isFaceDetected ? 32 : 22,
+                  height: widget.isFaceDetected ? 36 : 26,
+                  width: widget.isFaceDetected ? 36 : 26,
                 )
               : ColorFiltered(
                   colorFilter: ColorFilter.mode(
@@ -287,6 +287,12 @@ class LivenessDetectionStepOverlayWidgetState
         const SizedBox(width: 16),
         Text(
           widget.isFaceDetected ? 'Wajah ditemukan' : 'Wajah tidak ditemukan',
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: widget.isFaceDetected
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.error,
+              ),
         ),
       ],
     );

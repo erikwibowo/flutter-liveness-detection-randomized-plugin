@@ -344,23 +344,6 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       case LivenessDetectionStep.blink:
         await _handlingBlinkStep(face: face, step: step);
         break;
-
-      case LivenessDetectionStep.lookRight:
-        await _handlingTurnRight(face: face, step: step);
-        break;
-
-      case LivenessDetectionStep.lookLeft:
-        await _handlingTurnLeft(face: face, step: step);
-        break;
-
-      case LivenessDetectionStep.lookUp:
-        await _handlingLookUp(face: face, step: step);
-        break;
-
-      case LivenessDetectionStep.lookDown:
-        await _handlingLookDown(face: face, step: step);
-        break;
-
       case LivenessDetectionStep.smile:
         await _handlingSmile(face: face, step: step);
         break;
@@ -531,91 +514,6 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       await _completeStep(step: step);
     }
   }
-
-  Future<void> _handlingTurnRight({
-    required Face face,
-    required LivenessDetectionStep step,
-  }) async {
-    if (Platform.isAndroid) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
-              .instance.thresholdConfig
-              .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
-          as LivenessThresholdHead?;
-      if ((face.headEulerAngleY ?? 0) <
-          (headTurnThreshold?.rotationAngle ?? -30)) {
-        _startProcessing();
-        await _completeStep(step: step);
-      }
-    } else if (Platform.isIOS) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
-              .instance.thresholdConfig
-              .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
-          as LivenessThresholdHead?;
-      if ((face.headEulerAngleY ?? 0) >
-          (headTurnThreshold?.rotationAngle ?? 30)) {
-        _startProcessing();
-        await _completeStep(step: step);
-      }
-    }
-  }
-
-  Future<void> _handlingTurnLeft({
-    required Face face,
-    required LivenessDetectionStep step,
-  }) async {
-    if (Platform.isAndroid) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
-              .instance.thresholdConfig
-              .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
-          as LivenessThresholdHead?;
-      if ((face.headEulerAngleY ?? 0) >
-          (headTurnThreshold?.rotationAngle ?? 30)) {
-        _startProcessing();
-        await _completeStep(step: step);
-      }
-    } else if (Platform.isIOS) {
-      final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
-              .instance.thresholdConfig
-              .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
-          as LivenessThresholdHead?;
-      if ((face.headEulerAngleY ?? 0) <
-          (headTurnThreshold?.rotationAngle ?? -30)) {
-        _startProcessing();
-        await _completeStep(step: step);
-      }
-    }
-  }
-
-  Future<void> _handlingLookUp({
-    required Face face,
-    required LivenessDetectionStep step,
-  }) async {
-    final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
-            .instance.thresholdConfig
-            .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
-        as LivenessThresholdHead?;
-    if ((face.headEulerAngleX ?? 0) >
-        (headTurnThreshold?.rotationAngle ?? 20)) {
-      _startProcessing();
-      await _completeStep(step: step);
-    }
-  }
-
-  Future<void> _handlingLookDown({
-    required Face face,
-    required LivenessDetectionStep step,
-  }) async {
-    final headTurnThreshold = FlutterLivenessDetectionRandomizedPlugin
-            .instance.thresholdConfig
-            .firstWhereOrNull((p0) => p0 is LivenessThresholdHead)
-        as LivenessThresholdHead?;
-    if ((face.headEulerAngleX ?? 0) <
-        (headTurnThreshold?.rotationAngle ?? -15)) {
-      _startProcessing();
-      await _completeStep(step: step);
-    }
-  }
-
   Future<void> _handlingSmile({
     required Face face,
     required LivenessDetectionStep step,

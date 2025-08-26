@@ -105,8 +105,8 @@ class LivenessDetectionStepOverlayWidgetState
     }
 
     return CircularProgressWidget(
-      unselectedColor: Colors.grey,
-      selectedColor: Colors.green,
+      unselectedColor: Theme.of(context).colorScheme.onSurface.withAlpha(150),
+      selectedColor: Theme.of(context).colorScheme.primary,
       heightLine: _heightLine,
       current: _currentStepIndicator,
       maxStep: _indicatorMaxStep,
@@ -186,16 +186,15 @@ class LivenessDetectionStepOverlayWidgetState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Verifikasi Keaktifan")),
-      body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.all(12),
-          height: double.infinity,
-          width: double.infinity,
-          child: _buildBody(),
-        ),
-      )
-    );
+        appBar: AppBar(title: const Text("Verifikasi Keaktifan")),
+        body: SafeArea(
+          child: Container(
+            margin: const EdgeInsets.all(12),
+            height: double.infinity,
+            width: double.infinity,
+            child: _buildBody(),
+          ),
+        ));
   }
 
   Widget _buildBody() {
@@ -208,7 +207,10 @@ class LivenessDetectionStepOverlayWidgetState
         const SizedBox(height: 16),
         _buildFaceDetectionStatus(),
         const SizedBox(height: 16),
-        Text(_getRemainingTimeText(widget.duration ?? 45)),
+        Text(
+          _getRemainingTimeText(_remainingDuration),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
         const SizedBox(height: 16),
         Visibility(
           visible: _pageViewVisible,
@@ -218,7 +220,9 @@ class LivenessDetectionStepOverlayWidgetState
         const SizedBox(height: 16),
         Center(
           child: CupertinoActivityIndicator(
-            color: _isLoading ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.onSurface,
+            color: _isLoading
+                ? Theme.of(context).colorScheme.surface
+                : Theme.of(context).colorScheme.onSurface,
           ),
         ),
       ],
@@ -257,7 +261,9 @@ class LivenessDetectionStepOverlayWidgetState
                 )
               : ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                      widget.isFaceDetected ? Colors.green : Colors.black,
+                      widget.isFaceDetected
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onSurface,
                       BlendMode.modulate),
                   child: LottieBuilder.asset(
                     widget.isFaceDetected

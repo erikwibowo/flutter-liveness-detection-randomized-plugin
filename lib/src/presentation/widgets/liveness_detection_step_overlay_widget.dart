@@ -274,7 +274,7 @@ class LivenessDetectionStepOverlayWidgetState
                   colorFilter: ColorFilter.mode(
                       widget.isFaceDetected
                           ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onSurface,
+                          : Theme.of(context).colorScheme.error,
                       BlendMode.modulate),
                   child: LottieBuilder.asset(
                     widget.isFaceDetected
@@ -284,7 +284,7 @@ class LivenessDetectionStepOverlayWidgetState
                     width: widget.isFaceDetected ? 32 : 22,
                   )),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 8),
         Text(
           widget.isFaceDetected ? 'Wajah ditemukan' : 'Wajah tidak ditemukan',
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(

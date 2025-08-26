@@ -68,9 +68,15 @@ class LivenessDetectionStepOverlayWidgetState
     debugPrint('showCurrentStep ${widget.showCurrentStep}');
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize theme/context dependent widgets here instead of initState
+    _circularProgressWidget = _buildCircularIndicator();
+  }
+
   void _initializeControllers() {
     _pageController = PageController(initialPage: 0);
-    _circularProgressWidget = _buildCircularIndicator();
   }
 
   void _initializeTimer() {

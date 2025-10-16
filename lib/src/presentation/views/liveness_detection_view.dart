@@ -275,6 +275,7 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
 
   Future<void> _processCameraImage(CameraImage cameraImage) async {
     final WriteBuffer allBytes = WriteBuffer();
+    final plane = cameraImage.planes.first;
     for (final Plane plane in cameraImage.planes) {
       allBytes.putUint8List(plane.bytes);
     }
@@ -291,12 +292,13 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
     if (imageRotation == null) return;
 
     final inputImageFormat =
-        Platform.isIOS ? InputImageFormat.bgra8888 : InputImageFormat.nv21;
+      Platform.isIOS ? InputImageFormat.bgra8888 : InputImageFormat.nv21;
 
     final inputImageData = InputImageMetadata(
       size: imageSize,
       rotation: imageRotation,
       format: inputImageFormat,
+      quality: 80,
       bytesPerRow: cameraImage.planes[0].bytesPerRow,
     );
 

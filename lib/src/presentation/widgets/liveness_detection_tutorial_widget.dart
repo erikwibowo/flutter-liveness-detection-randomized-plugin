@@ -79,6 +79,16 @@ class _LivenessDetectionTutorialScreenState
                 label: const Text('Mulai Verifikasi Keaktifan'),
               ),
             ),
+            const SizedBox(
+              height: 24,
+            ),
+            Text("Layar informasi bisa dinonaktifkan pada pengaturan",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                textAlign: TextAlign.center,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
           ],
         ),
       ),

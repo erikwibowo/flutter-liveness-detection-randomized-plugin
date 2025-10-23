@@ -82,27 +82,23 @@ class _LivenessDetectionTutorialScreenState
             const SizedBox(
               height: 24,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 4,
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 16,
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary,
-                ),
-                Text(
-                  "Layar informasi dapat dinonaktifkan di pengaturan",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+            Card(
+              clipBehavior: Clip.hardEdge,
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(
+                    Icons.info_rounded,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-              ],
-            )
+                title: Text(
+                  "Layar informasi dapat dinonaktifkan di pengaturan",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

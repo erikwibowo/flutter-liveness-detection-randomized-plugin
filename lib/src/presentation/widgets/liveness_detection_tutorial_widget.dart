@@ -82,12 +82,26 @@ class _LivenessDetectionTutorialScreenState
             const SizedBox(
               height: 24,
             ),
-            Text(
-              "Aktifkan layar informasi verifikasi keaktifan wajah",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 4,
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 16,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary,
+                ),
+                Text(
+                  "Layar informasi dapat dinonaktifkan di pengaturan",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
             )
           ],
         ),

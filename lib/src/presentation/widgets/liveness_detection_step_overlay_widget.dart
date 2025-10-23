@@ -294,6 +294,11 @@ class LivenessDetectionStepOverlayWidgetState
                     : Theme.of(context).colorScheme.error,
               ),
         ),
+        const SizedBox(width: 8),
+        Text("Layar informasi bisa dinonaktifkan pada pengaturan", style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+        ),)
       ],
     );
   }

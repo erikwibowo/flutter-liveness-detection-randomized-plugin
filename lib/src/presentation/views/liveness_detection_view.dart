@@ -298,7 +298,6 @@ class _LivenessDetectionScreenState extends State<LivenessDetectionView> {
       size: imageSize,
       rotation: imageRotation,
       format: inputImageFormat,
-      quality: 80,
       bytesPerRow: cameraImage.planes[0].bytesPerRow,
     );
 
